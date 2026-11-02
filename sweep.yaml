@@ -1,0 +1,39 @@
+# W&B sweep for VGG6 on CIFAR-10 (Q3a parallel-coordinates plot, Q3b scatter).
+#
+# Usage (from the project folder, after `wandb login`):
+#   wandb sweep sweep.yaml                 # prints a sweep ID
+#   wandb agent <entity>/<project>/<id> --count 10
+#
+# Each trial runs:  python -m src.train --wandb --data_dir /content/data --out_dir runs_sweep --<param>=<value> ...
+project: vgg6-cifar10
+program: src/train.py
+method: bayes
+metric:
+  name: best_val_acc
+  goal: maximize
+parameters:
+  activation:
+    values: [relu, sigmoid, tanh, silu, gelu]
+  optimizer:
+    values: [sgd, nesterov, adam, adagrad, rmsprop, nadam]
+  lr:
+    values: [0.001, 0.003, 0.01, 0.05]
+  batch_size:
+    values: [64, 128, 256]
+  epochs:
+    values: [15, 20]
+  scheduler:
+    values: [none, cosine]
+  weight_decay:
+    values: [0.0, 0.0005]
+command:
+  - ${env}
+  - python
+  - -m
+  - src.train
+  - --wandb
+  - --data_dir
+  - /content/data
+  - --out_dir
+  - runs_sweep
+  - ${args}

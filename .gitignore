@@ -1,0 +1,20 @@
+# Dataset (downloaded automatically)
+data/
+
+# Local environment and caches
+.venv/
+__pycache__/
+*.pyc
+*.ipynb
+# W&B local logs
+wandb/
+
+# Per-run outputs (metrics are in W&B; only the final model is committed)
+runs/
+runs_sweep/
+runs_check/
+*.zip
+
+# Model weights: keep only the submitted checkpoint
+*.pth
+!checkpoints/best_model.pth
